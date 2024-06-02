@@ -3,7 +3,7 @@ import "./Roulette.css";
 
 const Roulette = () => {
   const [numbers, setNumbers] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [isSpinning, setIsSpinning] = useState([true, true, true, true, true, true, true]);
+  const [isSpinning, setIsSpinning] = useState([false, false, false, false, false, false, false]);
 
   useEffect(() => {
     const intervals = isSpinning.map((spin, index) => {
@@ -22,6 +22,10 @@ const Roulette = () => {
       };
     }, [isSpinning]);
 
+    const startSpin = () => {
+      setIsSpinning([true, true, true, true, true, true, true]); // 全てのスロットのスピンを開始
+    };
+
     const stopSpin = (index) => {
         setIsSpinning((prevIsSpinning) => {
             const newIsSpinning = [...prevIsSpinning];
@@ -31,14 +35,19 @@ const Roulette = () => {
   };
 
   return (
-    <div class="warap">
-      <div class="roulette-mark">
-        <div class="postal-mark">〒</div>
+    <div className="warap">
+      <div className="control-panel">
+        <div className="roulette-mark">
+          <div className="postal-mark">〒</div>
+        </div>
+        <button onClick={startSpin} className="btn start-btn">Start</button>
       </div>
       {numbers.map((number, index) => (
-            <div key={index} class="roulette">
-                <div class="number">{number}</div>
-                <button onClick={() => stopSpin(index)}>Stop</button>
+            <div key={index}>
+              <div className="roulette">
+                <div className="number">{number}</div>
+              </div>
+              <button onClick={() => stopSpin(index)} className="btn stop-btn">Stop</button>
             </div>
         ))}
     </div>

@@ -3,6 +3,11 @@
   justify-content: center;
   margin-top: 100px;
 }
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .roulette {
   width: 100px;
@@ -27,11 +32,32 @@
   animation: spin 1s infinite linear;
 }
 
-@keyframes spin {
+.btn {
+  width: 100px;
+  height: 100px;
+  background-color: #00bfff;
+  color: #fff;
+  border-color: #00bfff;
+  border-radius: 50%;
+  font-size: large;
+  font-weight: bold;
+}
+
+.stop-btn {
+  margin-top: 20px;
+}
+
+.start-btn {
+  margin-top: 20px;
+  background-color: #ff8c00;
+  border-color: #ff8c00;
+}
+
+/* @keyframes spin {
   from {
     transform: rotateX(0deg);
   }
   to {
     transform: rotateX(360deg);
   }
-}
+} */
