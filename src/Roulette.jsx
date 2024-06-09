@@ -2,8 +2,24 @@ import React, { useState, useEffect } from "react";
 import "./Roulette.css";
 
 const Roulette = ({setPostalCode}) => {
+  const [postalCodes, setPostalCodes] = useState([]);
   const [numbers, setNumbers] = useState([0, 0, 0, 0, 0, 0, 0]);
   const [isSpinning, setIsSpinning] = useState([false, false, false, false, false, false, false]);
+  const [selectedPostalCode, setSelectedPostalCode] = useState("");
+
+  useEffect(() => {
+    const fetchPostalCodes = async () => {
+      try {
+        const response = await fetch('/postalCodes.json');
+        const data = await response.json();
+        setPostalCodes(data);
+      } catch (error) {
+        console.error('Error fetching postal codes:', error);
+      }
+    };
+
+    fetchPostalCodes();
+  }, []);
 
   useEffect(() => {
     const intervals = isSpinning.map((spin, index) => {
@@ -14,7 +30,7 @@ const Roulette = ({setPostalCode}) => {
           setNumbers((prevNumbers) =>
             prevNumbers.map((prevNumber, i) => (i === index ? (prevNumber + 1) % 10 : prevNumber))
           );
-        }, 500); // 100msごとに数字を更新
+        }, 100); // 100msごとに数字を更新
     });
   
     return () => {
@@ -23,6 +39,11 @@ const Roulette = ({setPostalCode}) => {
   }, [isSpinning]);
 
   const startSpin = () => {
+    if (postalCodes.length === 0) return;
+
+    const randomPostalCode = postalCodes[Math.floor(Math.random() * postalCodes.length)];
+    setSelectedPostalCode(randomPostalCode);
+    setNumbers(randomPostalCode.split('').map(Number));
     setIsSpinning([true, true, true, true, true, true, true]); // 全てのスロットのスピンを開始
   };
 
@@ -38,8 +59,8 @@ const Roulette = ({setPostalCode}) => {
     stopSpin(index);
     console.log(numbers)
     // すべてのスロットが停止したかどうかを確認
-    if (numbers.length === 7) {
-      setPostalCode(numbers.join(''));
+    if (isSpinning.every((spin, i) => !spin || i === index)) {
+      setPostalCode(selectedPostalCode);
       console.log(setPostalCode);
     }
   };
