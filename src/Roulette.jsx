@@ -5,7 +5,6 @@ const Roulette = ({setPostalCode}) => {
   const [postalCodes, setPostalCodes] = useState([]);
   const [numbers, setNumbers] = useState([0, 0, 0, 0, 0, 0, 0]);
   const [isSpinning, setIsSpinning] = useState([false, false, false, false, false, false, false]);
-  const [selectedPostalCode, setSelectedPostalCode] = useState("");
 
   useEffect(() => {
     const fetchPostalCodes = async () => {
@@ -40,10 +39,6 @@ const Roulette = ({setPostalCode}) => {
 
   const startSpin = () => {
     if (postalCodes.length === 0) return;
-
-    const randomPostalCode = postalCodes[Math.floor(Math.random() * postalCodes.length)];
-    setSelectedPostalCode(randomPostalCode);
-    setNumbers(randomPostalCode.split('').map(Number));
     setIsSpinning([true, true, true, true, true, true, true]); // 全てのスロットのスピンを開始
   };
 
@@ -60,8 +55,17 @@ const Roulette = ({setPostalCode}) => {
     console.log(numbers)
     // すべてのスロットが停止したかどうかを確認
     if (isSpinning.every((spin, i) => !spin || i === index)) {
-      setPostalCode(selectedPostalCode);
-      console.log(setPostalCode);
+      const currentNumbers = numbers.map((num, i) => (i === index ? Math.floor(Math.random() * 10) : num));
+      console.log("currentNumbers: ",currentNumbers);
+      const possiblePostalCodes = postalCodes.filter(code => {
+        return code.startsWith(currentNumbers.join('').slice(0, index + 1));
+      });
+      console.log(possiblePostalCodes);
+      if (possiblePostalCodes.length > 0) {
+        const selectedPostalCode = possiblePostalCodes[Math.floor(Math.random() * possiblePostalCodes.length)];
+        setNumbers(selectedPostalCode.split('').map(Number));
+        setPostalCode(selectedPostalCode);
+      }
     }
   };
 
