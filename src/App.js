@@ -1,23 +1,22 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Postal from './Postal';
+import Roulette from './Roulette';
+
+// css
 import './App.css';
 
-function App() {
+const App = () => {
+
+  const [postalCode, setPostalCode] = useState('');
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div>郵便番号ルーレット</div>
       </header>
+
+      <Roulette setPostalCode={setPostalCode} />
+      <Postal postalCode={postalCode} />
     </div>
   );
 }
